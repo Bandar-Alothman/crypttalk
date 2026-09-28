@@ -1,0 +1,238 @@
+/* CryptTalk — deep teal "vault" palette with amber for locked content. */
+
+:root {
+    --bg: #e9eff1;
+    --surface: #ffffff;
+    --ink: #1c2a31;
+    --muted: #5b6b73;
+    --line: #cfd9dd;
+    --brand: #0f4c5c;
+    --brand-ink: #ffffff;
+    --mine: #dcedf1;
+    --locked: #fbf1dd;
+    --locked-line: #d99a2b;
+    --danger: #b23a31;
+    --ok: #2f7d4f;
+    --cipher-bg: #eef2f3;
+    --radius-lg: 14px;
+    --radius-sm: 8px;
+    --font: "Segoe UI", system-ui, -apple-system, "Noto Sans Arabic", Tahoma, sans-serif;
+    --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0e171b;
+        --surface: #16242a;
+        --ink: #e3ecef;
+        --muted: #93a6ad;
+        --line: #29404a;
+        --brand: #3f9bb0;
+        --brand-ink: #06161b;
+        --mine: #1c3a44;
+        --locked: #2d2515;
+        --locked-line: #d9a441;
+        --danger: #e0685e;
+        --ok: #5cc38a;
+        --cipher-bg: #0f1c21;
+    }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body { height: 100%; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.5 var(--font);
+    padding: 24px 16px;
+}
+
+.shell {
+    max-width: 780px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ---------- header ---------- */
+
+.masthead h1 {
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--brand);
+}
+.masthead p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    max-width: 60ch;
+}
+
+/* ---------- panels ---------- */
+
+.panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+}
+
+.join form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 420px;
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-weight: 600; }
+.hint { margin: 0; font-size: 0.875rem; color: var(--muted); }
+.error { margin: 0; color: var(--danger); font-weight: 600; }
+
+input[type="text"], input[type="password"] {
+    font: inherit;
+    color: inherit;
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 11px 12px;
+    width: 100%;
+}
+input:focus-visible, button:focus-visible, .toggle input:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--brand) 55%, transparent);
+    outline-offset: 2px;
+    border-color: var(--brand);
+}
+
+/* ---------- buttons ---------- */
+
+.btn {
+    font: inherit;
+    font-weight: 600;
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.btn:disabled { opacity: 0.6; cursor: progress; }
+.btn-primary { background: var(--brand); color: var(--brand-ink); }
+.btn-primary:hover:not(:disabled) { filter: brightness(1.1); }
+.btn-quiet { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn-quiet:hover { border-color: var(--muted); }
+.btn-danger { background: transparent; color: var(--danger); border-color: currentColor; }
+.btn-danger:hover { background: color-mix(in srgb, var(--danger) 10%, transparent); }
+
+/* ---------- chat ---------- */
+
+.chat { display: flex; flex-direction: column; gap: 12px; }
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    font-size: 0.875rem;
+}
+.spacer { flex: 1; }
+
+.indicator::before {
+    content: "";
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    background: var(--muted);
+    vertical-align: 1px;
+}
+.indicator[data-state="online"]::before { background: var(--ok); }
+.indicator[data-state="offline"] { color: var(--danger); }
+.indicator[data-state="offline"]::before { background: var(--danger); }
+
+.fingerprint { color: var(--muted); }
+.fingerprint strong { font-family: var(--mono); color: var(--ink); letter-spacing: 0.04em; }
+
+.toggle { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+
+.messages {
+    height: min(60vh, 480px);
+    overflow-y: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--bg);
+}
+
+.empty { margin: auto; color: var(--muted); text-align: center; }
+
+.message {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    max-width: 85%;
+    align-self: flex-start;
+}
+.message.is-mine { align-self: flex-end; background: var(--mine); border-color: transparent; }
+.message.is-locked { background: var(--locked); border: 1px dashed var(--locked-line); }
+.message.is-locked .message-body { color: var(--muted); font-style: italic; }
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.8125rem;
+    margin-bottom: 2px;
+}
+.message-author { font-weight: 700; }
+.message-header time { color: var(--muted); }
+
+.message-body { margin: 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+
+.message-cipher {
+    display: none;
+    margin-top: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: var(--cipher-bg);
+    color: var(--locked-line);
+    font: 0.75rem/1.4 var(--mono);
+    overflow-wrap: anywhere;
+}
+.messages.show-cipher .message-cipher { display: block; }
+
+.composer { display: flex; gap: 8px; }
+.composer input { flex: 1; min-width: 0; }
+
+.status { margin: 0; min-height: 1.5em; font-size: 0.875rem; color: var(--muted); }
+.status.is-error { color: var(--danger); font-weight: 600; }
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+    body { padding: 16px 10px; }
+    .masthead h1 { font-size: 1.6rem; }
+    .panel { padding: 14px; }
+    .composer { flex-direction: column; }
+    .message { max-width: 100%; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .message { animation: arrive 180ms ease-out; }
+    @keyframes arrive { from { opacity: 0; transform: translateY(4px); } }
+}

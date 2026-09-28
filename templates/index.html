@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>CryptTalk — end-to-end encrypted chat</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+    <main class="shell">
+        <header class="masthead">
+            <h1><span aria-hidden="true">🔐</span> CryptTalk</h1>
+            <p>Messages are encrypted in your browser with AES-256-GCM. The server only stores ciphertext it cannot read.</p>
+        </header>
+
+        <!-- Join screen -->
+        <section id="joinView" class="panel join">
+            <form id="joinForm" autocomplete="off" novalidate>
+                <div class="field">
+                    <label for="username">Your name</label>
+                    <input id="username" type="text" maxlength="32" dir="auto" required>
+                </div>
+                <div class="field">
+                    <label for="passphrase">Shared passphrase</label>
+                    <input id="passphrase" type="password" minlength="8" required>
+                    <p class="hint">Everyone in the chat uses the same passphrase. Agree on it in person, never through the chat itself. It never leaves this device.</p>
+                </div>
+                <button id="joinBtn" type="submit" class="btn btn-primary">Unlock chat</button>
+                <p id="joinError" class="error" role="alert" hidden></p>
+            </form>
+        </section>
+
+        <!-- Chat screen -->
+        <section id="chatView" class="panel chat" hidden>
+            <div class="toolbar">
+                <span id="connection" class="indicator" data-state="pending">Connecting</span>
+                <span class="fingerprint" title="Everyone using the same passphrase sees the same fingerprint">
+                    Key fingerprint <strong id="fingerprint"></strong>
+                </span>
+                <span class="spacer"></span>
+                <label class="toggle">
+                    <input id="cipherToggle" type="checkbox">
+                    Show what the server sees
+                </label>
+                <button id="clearViewBtn" type="button" class="btn btn-quiet">Clear screen</button>
+                <button id="leaveBtn" type="button" class="btn btn-danger">Lock and leave</button>
+            </div>
+
+            <div id="messages" class="messages" aria-live="polite">
+                <p id="emptyState" class="empty">No messages yet. Write the first one below.</p>
+            </div>
+
+            <form id="sendForm" class="composer" autocomplete="off">
+                <label for="messageInput" class="visually-hidden">Message</label>
+                <input id="messageInput" type="text" maxlength="2000" dir="auto" placeholder="Write a message">
+                <button id="sendBtn" type="submit" class="btn btn-primary">Encrypt and send</button>
+            </form>
+            <p id="status" class="status" role="status"></p>
+        </section>
+    </main>
+</body>
+</html>
